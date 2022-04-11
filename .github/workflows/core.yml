@@ -35,14 +35,14 @@ jobs:
     - name: Scan source languages
       if: ${{ matrix.language == 'js' || matrix.language == 'python' }}
       run: |
-        sl analyze --tag app.group=multi-vuln-app --app app-${{ matrix.language }} --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --${{ matrix.language }} --cpg --oss-recursive .
+        sl analyze --tag app.group=GH-multi-vuln-app --app app-${{ matrix.language }} --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --${{ matrix.language }} --cpg --oss-recursive .
       env:
         SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
     # For go, the last argument used must be identical to the one used with go build
     - name: Scan go application
       if: ${{ matrix.language == 'go' }}
       run: |
-        cd go && sl analyze --tag app.group=multi-vuln-app --app app-${{ matrix.language }} --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --${{ matrix.language }} --cpg --oss-recursive ./...
+        cd go && sl analyze --tag app.group=GH-multi-vuln-app --app app-${{ matrix.language }} --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --${{ matrix.language }} --cpg --oss-recursive ./...
       env:
         SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
   ##############################################
@@ -89,7 +89,7 @@ jobs:
         fi
         if [ "$BUILT" = "1" ] && [ -d "$TARGET_DIR" ]; then
           jar cvf app.jar -C $TARGET_DIR .
-          ${GITHUB_WORKSPACE}/sl analyze --wait --tag app.group=multi-vuln-app --app app-java --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --java --cpg app.jar
+          ${GITHUB_WORKSPACE}/sl analyze --wait --tag app.group=GH-multi-vuln-app --app app-java --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --java --cpg app.jar
         else
           echo "Unable to build the project automatically. Please follow the instructions in our documentation to setup this project - https://docs.shiftleft.io/ngsast/analyzing-applications/java"  
         fi
